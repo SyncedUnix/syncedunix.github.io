@@ -1,1 +1,27 @@
-check
+--Synced UnixTime Module for roblox
+while not _G.SyncedUnixTime do
+	local Success,ErrorMessage = pcall(function()
+		_G.SyncedUnixTime = {tonumber(string.split(string.split(game:GetService("HttpService"):RequestAsync({["Url"] = "https://syncedunix.github.io/", ["Method"] = "HEAD"})["Headers"]["x-timer"],",")[1],"S")[2]), os.clock()}
+	end)
+	if Success then
+		break
+	else
+		warn(ErrorMessage)
+	end
+	task.wait(6)
+end
+
+local blank = function(a)
+	return a
+end
+
+return function(Decimals)
+	while not _G.SyncedUnixTime do
+		task.wait()
+	end
+	local r = math.floor
+	if Decimals then
+		r = blank
+	end
+	return r((_G.SyncedUnixTime[1] - _G.SyncedUnixTime[2]) + os.clock())
+end
